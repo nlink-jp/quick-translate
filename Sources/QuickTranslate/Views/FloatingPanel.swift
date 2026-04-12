@@ -10,7 +10,6 @@ final class FloatingPanel: NSPanel {
             defer: false
         )
 
-        isFloatingPanel = true
         level = .floating
         titleVisibility = .hidden
         titlebarAppearsTransparent = true
@@ -19,6 +18,7 @@ final class FloatingPanel: NSPanel {
         isReleasedWhenClosed = false
         collectionBehavior.insert(.fullScreenAuxiliary)
         animationBehavior = .utilityWindow
+        becomesKeyOnlyIfNeeded = false
 
         // Center on screen
         if let screen = NSScreen.main {

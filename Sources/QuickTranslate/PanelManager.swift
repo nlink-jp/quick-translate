@@ -34,13 +34,15 @@ final class PanelManager: ObservableObject {
             }
             panel = newPanel
         }
-        panel?.makeKeyAndOrderFront(nil)
+        NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
+        panel?.makeKeyAndOrderFront(nil)
         isVisible = true
     }
 
     func hide() {
         panel?.orderOut(nil)
+        NSApp.setActivationPolicy(.accessory)
         isVisible = false
     }
 }

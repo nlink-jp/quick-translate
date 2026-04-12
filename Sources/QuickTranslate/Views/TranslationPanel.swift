@@ -3,6 +3,7 @@ import SwiftUI
 struct TranslationPanel: View {
     @EnvironmentObject var settings: AppSettings
     @StateObject private var viewModel = TranslationViewModel()
+    @FocusState private var isSourceFocused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
@@ -17,6 +18,9 @@ struct TranslationPanel: View {
         .frame(width: 700, height: 400)
         .onAppear {
             viewModel.configure(settings: settings)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                isSourceFocused = true
+            }
         }
     }
 
@@ -49,6 +53,7 @@ struct TranslationPanel: View {
 
             TextEditor(text: $viewModel.sourceText)
                 .font(.body)
+                .focused($isSourceFocused)
                 .padding(4)
                 .onChange(of: viewModel.sourceText) {
                     viewModel.onSourceTextChanged()

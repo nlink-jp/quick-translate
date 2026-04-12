@@ -18,7 +18,9 @@ final class TranslationService {
             throw TranslationError.invalidEndpoint
         }
 
-        let systemPrompt = buildSystemPrompt()
+        let detected = detectLanguage(text: text)
+        let translateInto = resolveTargetLanguage(detected: detected)
+        let systemPrompt = buildSystemPrompt(translateInto: translateInto)
         let body = ChatCompletionRequest(
             model: settings.modelName,
             messages: [
@@ -52,19 +54,24 @@ final class TranslationService {
             throw TranslationError.emptyResponse
         }
 
-        let detected = detectLanguage(text: text)
         return TranslationResult(translation: content, detectedLanguage: detected)
     }
 
-    private func buildSystemPrompt() -> String {
+    /// Determine which language to translate into based on detected source language.
+    private func resolveTargetLanguage(detected: String) -> String {
         let target = settings.targetLanguage
+        // If source is already the target language, flip direction
+        if detected == target {
+            return target == "Japanese" ? "English" : "Japanese"
+        }
+        return target
+    }
+
+    private func buildSystemPrompt(translateInto: String) -> String {
         var prompt = """
-            You are a professional translator. Translate the user's text into \(target).
-            Rules:
-            - Detect the source language automatically.
-            - Output ONLY the translated text, nothing else.
-            - Preserve the original formatting (line breaks, bullet points, etc.).
-            - If the source text is already in \(target), translate it into English instead.
+            Translate the following text into \(translateInto).
+            Output ONLY the translation. No explanations, no notes.
+            Preserve formatting (line breaks, bullet points).
             """
 
         let glossary = GlossaryManager.load()
