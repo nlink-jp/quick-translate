@@ -4,12 +4,14 @@ A macOS menu-bar-resident translation tool powered by local LLM.
 
 ## Features
 
-- **Menu bar resident** — always accessible via global shortcut or menu bar icon
-- **Two-pane UI** — source text on the left, translation on the right
+- **Menu bar resident** — always accessible via global shortcut (⌘⇧T) or menu bar icon
+- **Floating panel** — stays above other windows, resizable, remembers position and size
+- **Two-pane UI** — source text on the left, editable translation on the right
 - **Local LLM** — uses OpenAI-compatible API (LM Studio by default)
-- **Auto language detection** — detects source language automatically
+- **Auto language detection** — detects source language and translates to the other direction
 - **Privacy first** — all processing stays on your machine
-- **Glossary** — custom term mappings for consistent translations
+- **Glossary** — custom term mappings managed via Settings UI
+- **Configurable shortcut** — change the global hotkey in Settings
 
 ## Requirements
 
@@ -30,38 +32,33 @@ open dist/QuickTranslate.app
 ## Usage
 
 1. Launch QuickTranslate — it appears in the menu bar
-2. Click the menu bar icon (or use the global shortcut) to open the translation panel
+2. Press **⌘⇧T** (or click the menu bar icon → Show / Hide Panel) to open the translation panel
 3. Type or paste text in the left pane
 4. Translation appears in the right pane after a short delay, or press **⌘ Return** to translate immediately
-5. Click **Copy** to copy the translation to clipboard
+5. Edit the translation if needed, then click **Copy** to copy to clipboard
+6. Press **⌘⇧T** or **⌘W** to close the panel
 
 ## Configuration
 
-Open **Settings** from the menu bar icon to configure:
+Open **Settings** from the menu bar icon. Two tabs are available:
+
+### General
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| API Endpoint | `http://localhost:1234/v1` | OpenAI-compatible API base URL |
+| Endpoint | `http://localhost:1234/v1` | OpenAI-compatible API base URL |
 | API Key | (empty) | Bearer token for API authentication (optional) |
 | Model | `google/gemma-4-26b-a4b` | LLM model name |
-| Target Language | Japanese | Default translation target |
+| Target Language | Japanese | Default translation target (also selectable in the panel) |
 | Debounce | 2.0s | Auto-translate delay after typing stops |
+| Toggle Panel | ⌘⇧T | Global keyboard shortcut (customizable) |
 
-## Glossary
+### Glossary
 
-Place a `glossary.json` file at:
+Add, edit, and delete term mappings directly in the UI. Entries are saved automatically to:
 
 ```
 ~/Library/Application Support/QuickTranslate/glossary.json
-```
-
-Format:
-
-```json
-[
-  {"source": "endpoint", "target": "エンドポイント"},
-  {"source": "deploy", "target": "デプロイ"}
-]
 ```
 
 ## Build
