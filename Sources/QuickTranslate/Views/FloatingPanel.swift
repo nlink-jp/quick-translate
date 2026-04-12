@@ -15,7 +15,7 @@ final class FloatingPanel: NSPanel {
         level = .floating
         titleVisibility = .hidden
         titlebarAppearsTransparent = true
-        isMovableByWindowBackground = true
+        isMovableByWindowBackground = false
         hidesOnDeactivate = false
         isReleasedWhenClosed = false
         collectionBehavior.insert(.fullScreenAuxiliary)

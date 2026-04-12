@@ -55,7 +55,7 @@ struct TranslationPanel: View {
                 .padding(.top, 8)
 
             TextEditor(text: $viewModel.sourceText)
-                .font(.body)
+                .font(.title2)
                 .focused($isSourceFocused)
                 .padding(4)
                 .onChange(of: viewModel.sourceText) {
@@ -70,10 +70,9 @@ struct TranslationPanel: View {
 
                 Spacer()
 
-                if viewModel.isTranslating {
-                    ProgressView()
-                        .scaleEffect(0.7)
-                }
+                ProgressView()
+                    .scaleEffect(0.7)
+                    .opacity(viewModel.isTranslating ? 1 : 0)
             }
             .padding(.horizontal, 8)
             .padding(.bottom, 8)
@@ -89,13 +88,9 @@ struct TranslationPanel: View {
                 .padding(.horizontal, 8)
                 .padding(.top, 8)
 
-            ScrollView {
-                Text(viewModel.translatedText)
-                    .font(.body)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(8)
-                    .textSelection(.enabled)
-            }
+            TextEditor(text: $viewModel.translatedText)
+                .font(.title2)
+                .padding(4)
 
             HStack {
                 Spacer()
