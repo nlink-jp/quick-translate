@@ -1,3 +1,4 @@
+import KeyboardShortcuts
 import SwiftUI
 
 struct SettingsView: View {
@@ -29,13 +30,14 @@ struct SettingsView: View {
             }
 
             Section("Shortcut") {
-                Text("Global shortcut configuration")
-                    .foregroundColor(.secondary)
-                    .font(.caption)
-                // TODO: Phase 1 — implement shortcut key recorder
+                HStack {
+                    Text("Toggle Panel")
+                    Spacer()
+                    KeyboardShortcuts.Recorder(for: .togglePanel)
+                }
             }
         }
         .formStyle(.grouped)
-        .frame(width: 400, height: 300)
+        .frame(width: 400, height: 350)
     }
 }
