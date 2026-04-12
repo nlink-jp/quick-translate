@@ -48,6 +48,41 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 self?.panelManager.toggle()
             }
         }
+
+        // Watch for any window becoming visible (e.g. Settings) to activate the app
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(windowDidBecomeKey),
+            name: NSWindow.didBecomeKeyNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(checkWindows),
+            name: NSWindow.willCloseNotification,
+            object: nil
+        )
     }
 
+    @objc private func windowDidBecomeKey(_ notification: Notification) {
+        guard let window = notification.object as? NSWindow,
+              !(window is FloatingPanel),
+              window.className.contains("Settings") || window.title.contains("Settings")
+        else { return }
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate(ignoringOtherApps: true)
+    }
+
+    @objc private func checkWindows(_ notification: Notification) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+            guard let self else { return }
+            let hasVisibleWindows = self.panelManager.isVisible
+                || NSApp.windows.contains(where: {
+                    $0.isVisible && !($0 is FloatingPanel) && $0.className.contains("Settings")
+                })
+            if !hasVisibleWindows {
+                NSApp.setActivationPolicy(.accessory)
+            }
+        }
+    }
 }

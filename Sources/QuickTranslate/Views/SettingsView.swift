@@ -58,7 +58,7 @@ struct GeneralSettingsView: View {
 }
 
 struct GlossarySettingsView: View {
-    @State private var entries: [GlossaryEntry] = []
+    @State private var entries: [GlossaryEntry] = GlossaryManager.load()
     @State private var newSource = ""
     @State private var newTarget = ""
 
@@ -120,7 +120,11 @@ struct GlossarySettingsView: View {
             .padding(12)
         }
         .onAppear {
-            entries = GlossaryManager.load()
+            // Reload only if @State was initialized before file existed
+            let loaded = GlossaryManager.load()
+            if entries.isEmpty && !loaded.isEmpty {
+                entries = loaded
+            }
         }
     }
 
