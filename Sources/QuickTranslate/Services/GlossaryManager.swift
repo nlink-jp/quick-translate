@@ -1,8 +1,13 @@
 import Foundation
 
-struct GlossaryEntry: Codable {
-    let source: String
-    let target: String
+struct GlossaryEntry: Codable, Identifiable {
+    var id = UUID()
+    var source: String
+    var target: String
+
+    enum CodingKeys: String, CodingKey {
+        case source, target
+    }
 }
 
 enum GlossaryManager {

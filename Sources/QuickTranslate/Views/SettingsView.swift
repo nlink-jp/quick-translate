@@ -5,6 +5,22 @@ struct SettingsView: View {
     @EnvironmentObject var settings: AppSettings
 
     var body: some View {
+        TabView {
+            GeneralSettingsView()
+                .environmentObject(settings)
+                .tabItem { Label("General", systemImage: "gear") }
+
+            GlossarySettingsView()
+                .tabItem { Label("Glossary", systemImage: "book") }
+        }
+        .frame(width: 500, height: 400)
+    }
+}
+
+struct GeneralSettingsView: View {
+    @EnvironmentObject var settings: AppSettings
+
+    var body: some View {
         Form {
             Section("API") {
                 TextField("Endpoint", text: $settings.apiEndpoint)
@@ -38,6 +54,95 @@ struct SettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .frame(width: 400, height: 350)
+    }
+}
+
+struct GlossarySettingsView: View {
+    @State private var entries: [GlossaryEntry] = []
+    @State private var newSource = ""
+    @State private var newTarget = ""
+
+    var body: some View {
+        VStack(spacing: 0) {
+            // Add new entry
+            HStack {
+                TextField("Source term", text: $newSource)
+                    .textFieldStyle(.roundedBorder)
+                TextField("Translation", text: $newTarget)
+                    .textFieldStyle(.roundedBorder)
+                Button {
+                    addEntry()
+                } label: {
+                    Image(systemName: "plus.circle.fill")
+                }
+                .disabled(newSource.isEmpty || newTarget.isEmpty)
+                .buttonStyle(.borderless)
+            }
+            .padding(12)
+
+            Divider()
+
+            // Entry list
+            if entries.isEmpty {
+                Spacer()
+                Text("No glossary entries")
+                    .foregroundColor(.secondary)
+                Spacer()
+            } else {
+                List {
+                    ForEach($entries) { $entry in
+                        HStack {
+                            TextField("Source", text: $entry.source)
+                                .textFieldStyle(.plain)
+                            Text("→")
+                                .foregroundColor(.secondary)
+                            TextField("Translation", text: $entry.target)
+                                .textFieldStyle(.plain)
+                        }
+                    }
+                    .onDelete(perform: deleteEntries)
+                }
+            }
+
+            Divider()
+
+            // Footer
+            HStack {
+                Text("\(entries.count) entries")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Spacer()
+                Button("Save") {
+                    save()
+                }
+                .buttonStyle(.borderedProminent)
+            }
+            .padding(12)
+        }
+        .onAppear {
+            entries = GlossaryManager.load()
+        }
+    }
+
+    private func addEntry() {
+        let trimmedSource = newSource.trimmingCharacters(in: .whitespaces)
+        let trimmedTarget = newTarget.trimmingCharacters(in: .whitespaces)
+        guard !trimmedSource.isEmpty, !trimmedTarget.isEmpty else { return }
+
+        entries.append(GlossaryEntry(source: trimmedSource, target: trimmedTarget))
+        newSource = ""
+        newTarget = ""
+        save()
+    }
+
+    private func deleteEntries(at offsets: IndexSet) {
+        entries.remove(atOffsets: offsets)
+        save()
+    }
+
+    private func save() {
+        // Remove entries with empty source or target
+        entries = entries.filter { !$0.source.isEmpty && !$0.target.isEmpty }
+        try? GlossaryManager.save(entries)
     }
 }
