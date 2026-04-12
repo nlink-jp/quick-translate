@@ -45,6 +45,10 @@ final class PanelManager: ObservableObject {
         NSApp.setActivationPolicy(.accessory)
         isVisible = false
     }
+
+    func setFloating(_ floating: Bool) {
+        panel?.level = floating ? .floating : .normal
+    }
 }
 
 private final class PanelDelegate: NSObject, NSWindowDelegate {

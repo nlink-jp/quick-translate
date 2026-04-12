@@ -13,7 +13,7 @@ struct SettingsView: View {
             GlossarySettingsView()
                 .tabItem { Label("Glossary", systemImage: "book") }
         }
-        .frame(width: 500, height: 400)
+        .frame(width: 500, height: 480)
     }
 }
 
@@ -21,39 +21,54 @@ struct GeneralSettingsView: View {
     @EnvironmentObject var settings: AppSettings
 
     var body: some View {
-        Form {
-            Section("API") {
-                TextField("Endpoint", text: $settings.apiEndpoint)
-                    .textFieldStyle(.roundedBorder)
-                SecureField("API Key (optional)", text: $settings.apiKey)
-                    .textFieldStyle(.roundedBorder)
-                TextField("Model", text: $settings.modelName)
-                    .textFieldStyle(.roundedBorder)
-            }
-
-            Section("Translation") {
-                Picker("Target Language", selection: $settings.targetLanguage) {
-                    Text("Japanese").tag("Japanese")
-                    Text("English").tag("English")
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionHeader("API")
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Endpoint").font(.caption).foregroundColor(.secondary)
+                    TextField("http://localhost:1234/v1", text: $settings.apiEndpoint)
+                        .textFieldStyle(.roundedBorder)
+                    Text("API Key").font(.caption).foregroundColor(.secondary)
+                    SecureField("optional", text: $settings.apiKey)
+                        .textFieldStyle(.roundedBorder)
+                    Text("Model").font(.caption).foregroundColor(.secondary)
+                    TextField("google/gemma-4-26b-a4b", text: $settings.modelName)
+                        .textFieldStyle(.roundedBorder)
                 }
-                HStack {
-                    Text("Debounce (seconds)")
-                    Slider(value: $settings.debounceSeconds, in: 0.5...5.0, step: 0.5)
-                    Text(String(format: "%.1f", settings.debounceSeconds))
-                        .monospacedDigit()
-                        .frame(width: 30)
-                }
-            }
 
-            Section("Shortcut") {
+                Divider()
+
+                sectionHeader("Translation")
+                VStack(alignment: .leading, spacing: 8) {
+                    Picker("Target Language", selection: $settings.targetLanguage) {
+                        Text("Japanese").tag("Japanese")
+                        Text("English").tag("English")
+                    }
+                    HStack {
+                        Text("Debounce")
+                        Slider(value: $settings.debounceSeconds, in: 0.5...5.0, step: 0.5)
+                        Text(String(format: "%.1fs", settings.debounceSeconds))
+                            .monospacedDigit()
+                            .frame(width: 40)
+                    }
+                }
+
+                Divider()
+
+                sectionHeader("Shortcut")
                 HStack {
                     Text("Toggle Panel")
                     Spacer()
                     KeyboardShortcuts.Recorder(for: .togglePanel)
                 }
             }
+            .padding(20)
         }
-        .formStyle(.grouped)
+    }
+
+    private func sectionHeader(_ title: String) -> some View {
+        Text(title)
+            .font(.headline)
     }
 }
 
@@ -94,13 +109,24 @@ struct GlossarySettingsView: View {
                         HStack {
                             TextField("Source", text: $entry.source)
                                 .textFieldStyle(.plain)
+                                .onChange(of: entry.source) { save() }
                             Text("→")
                                 .foregroundColor(.secondary)
                             TextField("Translation", text: $entry.target)
                                 .textFieldStyle(.plain)
+                                .onChange(of: entry.target) { save() }
+                            Button {
+                                if let index = entries.firstIndex(where: { $0.id == entry.id }) {
+                                    entries.remove(at: index)
+                                    save()
+                                }
+                            } label: {
+                                Image(systemName: "minus.circle.fill")
+                                    .foregroundColor(.red)
+                            }
+                            .buttonStyle(.borderless)
                         }
                     }
-                    .onDelete(perform: deleteEntries)
                 }
             }
 
@@ -112,10 +138,6 @@ struct GlossarySettingsView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                 Spacer()
-                Button("Save") {
-                    save()
-                }
-                .buttonStyle(.borderedProminent)
             }
             .padding(12)
         }

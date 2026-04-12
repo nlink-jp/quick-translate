@@ -35,9 +35,12 @@ struct TranslationPanel: View {
             Image(systemName: "arrow.right")
                 .font(.caption)
                 .foregroundColor(.secondary)
-            Text(settings.targetLanguage)
-                .font(.caption)
-                .foregroundColor(.secondary)
+            Picker("", selection: $settings.targetLanguage) {
+                Text("Japanese").tag("Japanese")
+                Text("English").tag("English")
+            }
+            .labelsHidden()
+            .frame(width: 100)
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)

@@ -65,22 +65,28 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc private func windowDidBecomeKey(_ notification: Notification) {
-        guard let window = notification.object as? NSWindow,
-              !(window is FloatingPanel),
-              window.className.contains("Settings") || window.title.contains("Settings")
-        else { return }
-        NSApp.setActivationPolicy(.regular)
-        NSApp.activate(ignoringOtherApps: true)
+        guard let window = notification.object as? NSWindow else { return }
+        if window is FloatingPanel {
+            // Floating panel became key — restore floating level
+            panelManager.setFloating(true)
+        } else if window.isVisible {
+            // Another window (Settings etc.) became key — lower floating panel
+            NSApp.setActivationPolicy(.regular)
+            NSApp.activate(ignoringOtherApps: true)
+            panelManager.setFloating(false)
+        }
     }
 
     @objc private func checkWindows(_ notification: Notification) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
             guard let self else { return }
-            let hasVisibleWindows = self.panelManager.isVisible
-                || NSApp.windows.contains(where: {
-                    $0.isVisible && !($0 is FloatingPanel) && $0.className.contains("Settings")
-                })
-            if !hasVisibleWindows {
+            let hasOtherWindows = NSApp.windows.contains(where: {
+                $0.isVisible && !($0 is FloatingPanel) && $0.canBecomeKey
+            })
+            if !hasOtherWindows {
+                self.panelManager.setFloating(true)
+            }
+            if !self.panelManager.isVisible && !hasOtherWindows {
                 NSApp.setActivationPolicy(.accessory)
             }
         }
