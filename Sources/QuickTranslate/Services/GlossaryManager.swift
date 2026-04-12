@@ -12,9 +12,13 @@ struct GlossaryEntry: Codable, Identifiable {
 
 enum GlossaryManager {
     static let glossaryURL: URL = {
-        let appSupport = FileManager.default.urls(
+        guard let appSupport = FileManager.default.urls(
             for: .applicationSupportDirectory, in: .userDomainMask
-        ).first!
+        ).first else {
+            // Fallback to tmp if Application Support is unavailable
+            return FileManager.default.temporaryDirectory
+                .appendingPathComponent("QuickTranslate/glossary.json")
+        }
         let dir = appSupport.appendingPathComponent("QuickTranslate", isDirectory: true)
         return dir.appendingPathComponent("glossary.json")
     }()

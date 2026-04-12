@@ -1,4 +1,5 @@
 import Foundation
+import NaturalLanguage
 
 struct TranslationResult {
     let translation: String
@@ -33,8 +34,9 @@ final class TranslationService {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        if !settings.apiKey.isEmpty {
-            request.setValue("Bearer \(settings.apiKey)", forHTTPHeaderField: "Authorization")
+        let apiKey = settings.apiKey
+        if !apiKey.isEmpty {
+            request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         }
         request.httpBody = try JSONEncoder().encode(body)
         request.timeoutInterval = 120
@@ -45,7 +47,7 @@ final class TranslationService {
             throw TranslationError.invalidResponse
         }
         guard httpResponse.statusCode == 200 else {
-            let body = String(data: data, encoding: .utf8) ?? "unknown"
+            let body = String(data: data.prefix(512), encoding: .utf8) ?? "unknown"
             throw TranslationError.apiError(statusCode: httpResponse.statusCode, body: body)
         }
 
@@ -86,11 +88,11 @@ final class TranslationService {
     }
 
     func detectLanguage(text: String) -> String {
-        let tagger = NSLinguisticTagger(tagSchemes: [.language], options: 0)
-        tagger.string = text
-        guard let language = tagger.dominantLanguage else { return "Unknown" }
+        let recognizer = NLLanguageRecognizer()
+        recognizer.processString(text)
+        guard let language = recognizer.dominantLanguage else { return "Unknown" }
         let locale = Locale(identifier: "en")
-        return locale.localizedString(forLanguageCode: language) ?? language
+        return locale.localizedString(forLanguageCode: language.rawValue) ?? language.rawValue
     }
 }
 

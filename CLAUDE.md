@@ -9,7 +9,8 @@
 - **macOS 14 Sonoma minimum** — do not use APIs from macOS 15+
 - **LSUIElement = true** — Dock icon is controlled via activation policy toggle, not Info.plist
 - **Activation policy toggle is required** — `.regular` when panel/Settings visible, `.accessory` when hidden; removing this breaks keyboard input
-- **Language detection is client-side** — NSLinguisticTagger determines direction before LLM call; do not ask the LLM to detect language
+- **Language detection is client-side** — NLLanguageRecognizer determines direction before LLM call; do not ask the LLM to detect language
+- **API key in Keychain** — never store secrets in UserDefaults/@AppStorage; use KeychainHelper
 
 ## Series
 
