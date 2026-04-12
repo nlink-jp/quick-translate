@@ -20,6 +20,7 @@ build-app: build
 	@cp $(BUILD_DIR)/$(APP_NAME) $(APP_BUNDLE)/Contents/MacOS/
 	@sed 's/$${VERSION}/$(VERSION)/g; s/$${BUNDLE_ID}/$(BUNDLE_ID)/g; s/$${APP_NAME}/$(APP_NAME)/g' \
 		Info.plist > $(APP_BUNDLE)/Contents/Info.plist
+	@cp icon.icns $(APP_BUNDLE)/Contents/Resources/icon.icns
 	@echo "Built $(APP_BUNDLE) ($(VERSION))"
 
 ## test: Run tests
