@@ -15,7 +15,7 @@ struct TranslationPanel: View {
                 targetPane
             }
         }
-        .frame(width: 700, height: 400)
+        .frame(minWidth: 500, minHeight: 300)
         .onAppear {
             viewModel.configure(settings: settings)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
