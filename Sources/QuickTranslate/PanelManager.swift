@@ -30,7 +30,7 @@ final class PanelManager: ObservableObject {
             )
             newPanel.delegate = PanelDelegate.shared
             PanelDelegate.shared.onClose = { [weak self] in
-                self?.isVisible = false
+                self?.hide()
             }
             panel = newPanel
         }
