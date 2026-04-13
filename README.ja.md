@@ -63,6 +63,15 @@ UIから用語マッピングの追加・編集・削除が可能。エントリ
 
 ## ビルド
 
+### 前提条件
+
+- **Xcode 15.2 以降**（Swift 5.9+ ツールチェーンおよび macOS SDK を含む）
+  - または Command Line Tools をインストール: `xcode-select --install`
+  - SDK が利用可能か確認: `xcrun --show-sdk-path`
+- **make**
+
+### コマンド
+
 ```bash
 make build        # リリースバイナリをビルド
 make build-app    # .appバンドルを生成 → dist/

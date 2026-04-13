@@ -63,6 +63,15 @@ Add, edit, and delete term mappings directly in the UI. Entries are saved automa
 
 ## Build
 
+### Prerequisites
+
+- **Xcode 15.2 or later** (includes Swift 5.9+ toolchain and macOS SDK)
+  - Or install Command Line Tools: `xcode-select --install`
+  - Verify SDK is available: `xcrun --show-sdk-path`
+- **make**
+
+### Commands
+
 ```bash
 make build        # Build release binary
 make build-app    # Build .app bundle → dist/
