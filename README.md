@@ -20,7 +20,7 @@ A macOS menu-bar-resident translation tool powered by local LLM.
 
 ## Installation
 
-Download `QuickTranslate.app` from [Releases](https://github.com/nlink-jp/quick-translate/releases).
+Download `QuickTranslate.app` from [Releases](https://github.com/nlink-jp/quick-translate/releases). The `.app` is **Developer ID signed and Apple-notarized** (stapled), so it launches without Gatekeeper prompts and works offline.
 
 Or build from source:
 
