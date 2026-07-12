@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.2] - 2026-07-12
+
+### Changed
+
+- **Release archive renamed** from `QuickTranslate-vX.Y.Z-macos-arm64.zip` to
+  `quick-translate-vX.Y.Z-darwin-arm64.zip`, aligning the tool name (kebab-case
+  repo name) and OS token (`darwin`) with the org-wide Release Archive Standard
+  (`nlink-jp/.github` CONVENTIONS.md). The archive still contains the notarized,
+  stapled `QuickTranslate.app`. quick-translate is a native SwiftUI app and
+  remains **darwin/arm64 only**.
+
+No change to the app's behaviour — a packaging / release-naming change.
+
 ## [0.1.1] - 2026-05-23
 
 ### Changed

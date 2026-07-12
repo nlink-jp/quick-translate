@@ -20,7 +20,7 @@
 
 ## インストール
 
-[Releases](https://github.com/nlink-jp/quick-translate/releases) から `QuickTranslate.app` をダウンロード。`.app` は **Apple Developer ID 署名済 + Apple notarize 済** (ticket staple 済) です。Gatekeeper ダイアログなしで起動でき、オフラインでも動作します。
+[Releases](https://github.com/nlink-jp/quick-translate/releases) から `.zip` をダウンロード・解凍し、`QuickTranslate.app` をアプリケーションフォルダに移動してください。`.app` は **Apple Developer ID 署名済 + Apple notarize 済** (ticket staple 済) です。Gatekeeper ダイアログなしで起動でき、オフラインでも動作します。
 
 またはソースからビルド：
 

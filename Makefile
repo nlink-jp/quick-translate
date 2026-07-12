@@ -1,4 +1,8 @@
 APP_NAME    := QuickTranslate
+# NAME is the kebab-case tool/repo name used for the release archive, per the
+# org Release Archive Standard (<name>-v<version>-<os>-<arch>.zip). The .app
+# bundle inside keeps its CamelCase name ($(APP_NAME).app).
+NAME        := quick-translate
 BUNDLE_ID   := jp.nlink.quick-translate
 VERSION     := $(shell git describe --tags --always --dirty 2>/dev/null || echo "0.1.0")
 BUILD_DIR   := .build/release
@@ -40,8 +44,8 @@ build-app: build
 ## zip the now-stapled bundle for upload to GitHub Releases.
 package: build-app
 	@$(NOTARIZE_SCRIPT) $(APP_BUNDLE) "$(NOTARY_PROFILE)"
-	@cd $(DIST_DIR) && /usr/bin/ditto -c -k --keepParent $(APP_NAME).app $(APP_NAME)-$(VERSION)-macos-arm64.zip
-	@ls -la $(DIST_DIR)/$(APP_NAME)-$(VERSION)-macos-arm64.zip
+	@cd $(DIST_DIR) && /usr/bin/ditto -c -k --keepParent $(APP_NAME).app $(NAME)-$(VERSION)-darwin-arm64.zip
+	@ls -la $(DIST_DIR)/$(NAME)-$(VERSION)-darwin-arm64.zip
 
 ## test: Run tests
 test:
