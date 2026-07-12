@@ -62,3 +62,13 @@ run:
 ## dev: Build and run (debug, verbose)
 dev:
 	swift run 2>&1
+
+# Homebrew tap generation (see scripts/release-brew.mk). After `make package`,
+# `make brew` generates this cask from the built darwin-arm64 zip into the local
+# nlink-jp/homebrew-tap checkout.
+BREW_KIND := cask
+BREW_DESC := Menu-bar translation tool powered by a local LLM
+BREW_NAME := $(NAME)
+BREW_APP := $(APP_NAME).app
+BREW_BUNDLE_ID := $(BUNDLE_ID)
+include scripts/release-brew.mk
