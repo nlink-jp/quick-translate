@@ -5,7 +5,6 @@ extension KeyboardShortcuts.Name {
     static let togglePanel = Self("togglePanel", default: .init(.t, modifiers: [.command, .shift]))
 }
 
-@main
 struct QuickTranslateApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 

@@ -25,7 +25,9 @@ quick-translate/
 ├── icon.icns                              # App icon
 ├── Info.plist                             # App bundle metadata (LSUIElement=true)
 ├── Sources/QuickTranslate/
-│   ├── QuickTranslateApp.swift            # @main — MenuBarExtra + AppDelegate
+│   ├── Entry.swift                        # @main — single-instance guard, then QuickTranslateApp.main()
+│   ├── SingleInstance.swift               # singleInstanceDecision() — startup duplicate-instance guard (pure)
+│   ├── QuickTranslateApp.swift            # MenuBarExtra + AppDelegate
 │   ├── PanelManager.swift                 # Floating panel show/hide + activation policy
 │   ├── Views/
 │   │   ├── FloatingPanel.swift            # NSPanel subclass with frame persistence
@@ -40,7 +42,8 @@ quick-translate/
 │       └── ChatCompletion.swift           # API request/response types
 ├── Tests/QuickTranslateTests/
 │   ├── TranslationServiceTests.swift      # Language detection tests
-│   └── ChatCompletionTests.swift          # JSON encode/decode tests
+│   ├── ChatCompletionTests.swift          # JSON encode/decode tests
+│   └── SingleInstanceTests.swift          # singleInstanceDecision() tests
 └── docs/
     ├── en/quick-translate-rfp.md
     └── ja/quick-translate-rfp.ja.md
@@ -67,3 +70,14 @@ quick-translate/
 - Panel frame (position/size) is saved to UserDefaults key `panelFrame`
 - NSLinguisticTagger is legacy but works; NLLanguageRecognizer is the modern alternative
 - KeyboardShortcuts package handles Carbon API registration for global hotkeys
+- **Notification clicks launch by bundle ID — enforce a single instance.**
+  Clicking a banner makes notificationd open the app via LaunchServices,
+  which resolves `jp.nlink.quick-translate` among *all* registered copies
+  (`dist/` dev builds, release-verification extractions, `/Applications`)
+  and may start a different copy than the running one → two menu bar
+  items, two copies racing to register the global shortcut. Guarded at
+  two layers: `LSMultipleInstancesProhibited` (Info.plist, stops
+  LaunchServices launches) and a startup check in `Entry.main`
+  (`singleInstanceDecision`, pure + tested) that exits with a stderr note
+  (covers direct exec / `open -n`). Side effect: to run a `dist/` build,
+  quit the installed instance first — a second copy now refuses to start.

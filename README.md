@@ -13,6 +13,10 @@ A macOS menu-bar-resident translation tool powered by local LLM.
 - **Glossary** — custom term mappings managed via Settings UI
 - **Configurable shortcut** — change the global hotkey in Settings
 
+The app is single-instance: starting a second copy (for example, a
+notification click resolving to a different copy of the .app) logs to
+stderr and exits, leaving the running instance alone.
+
 ## Requirements
 
 - macOS 14 Sonoma or later
