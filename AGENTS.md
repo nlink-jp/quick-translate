@@ -11,6 +11,7 @@ Floating panel toggled by global shortcut (⌘⇧T).
 ```bash
 make build        # Build release binary
 make build-app    # Build .app bundle → dist/QuickTranslate.app
+make verify-release  # gate: .notarized marker + stapler validate (run before upload)
 make test         # Run tests
 make run          # Build and run (debug)
 make clean        # Remove build artifacts
