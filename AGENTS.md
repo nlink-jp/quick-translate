@@ -1,5 +1,9 @@
 # AGENTS.md — quick-translate
 
+> **Archived (2026-08-30)** — superseded by
+> [instant-translate](https://github.com/nlink-jp/instant-translate). This
+> repository is read-only and no longer maintained; do not plan new work here.
+
 ## Summary
 
 macOS menu-bar-resident translation tool powered by local LLM (OpenAI-compatible API).

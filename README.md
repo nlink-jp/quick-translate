@@ -1,5 +1,15 @@
 # quick-translate
 
+> **⚠️ Archived (2026-08-30) — superseded by [instant-translate](https://github.com/nlink-jp/instant-translate).**
+> instant-translate is the same menu-bar workflow on the on-device macOS
+> Translation framework instead of a local LLM: no model to download or
+> host, no API endpoint to configure, and no credentials — but it requires
+> macOS 26 or later. quick-translate receives no further updates; the
+> repository stays public for reference and the notarized builds remain
+> downloadable from the
+> [Releases](https://github.com/nlink-jp/quick-translate/releases) page.
+> On macOS 26+: `brew install nlink-jp/tap/instant-translate`.
+
 A macOS menu-bar-resident translation tool powered by local LLM.
 
 ## Features

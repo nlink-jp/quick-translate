@@ -1,5 +1,15 @@
 # quick-translate
 
+> **⚠️ アーカイブ済み (2026-08-30) — 後継は [instant-translate](https://github.com/nlink-jp/instant-translate) です。**
+> instant-translate は同じメニューバー常駐のワークフローを、ローカル LLM では
+> なく macOS のオンデバイス Translation framework で実現します (モデルの
+> ダウンロード/ホスティング不要、API エンドポイント設定不要、クレデンシャル
+> 不要)。ただし **macOS 26 以降が必要**です。quick-translate の更新は終了
+> しますが、リポジトリは参照用に公開を維持し、notarize 済みビルドは
+> [Releases](https://github.com/nlink-jp/quick-translate/releases) から
+> 引き続き取得できます。
+> macOS 26 以降では: `brew install nlink-jp/tap/instant-translate`
+
 ローカルLLMを使ったmacOSメニューバー常駐型翻訳ツール。
 
 ## 特徴
